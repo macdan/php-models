@@ -36,19 +36,6 @@ class Dao
 		
 		throw new Exception( "nope" );
 	}
-	
-	public function __construct( array $array=array() )
-	{
-		foreach ( $array as $key => $value )
-		{
-			if ( !property_exists( $this, $key ) )
-			{
-				continue;
-			}
-			
-			$this->$key = $value;
-		}
-	}
 }
 
 class Dao_Product extends Dao
