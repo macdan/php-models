@@ -24,8 +24,10 @@ class Model
 			return;
 		}
 		
-		$this->__mapper->find( $this );
+		$mapper = $this->__mapper;
 		$this->__mapper = null;
+		
+		$mapper->find( $this );
 	}
 	
 	/**
@@ -144,7 +146,6 @@ class Model_Product extends Model
 class Model_Image extends Model
 {
 	protected $_id = null;
-	protected $_cldr = null;
 	protected $_src = null;
 }
 

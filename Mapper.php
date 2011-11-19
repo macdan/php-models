@@ -153,8 +153,7 @@ class Mapper_Product extends Mapper
 		{
 			$images[] = new Model_Image( array(
 				'_mapper' => $this->getImageMapper(),
-				'id' => $daoImage->image_id,
-				'cldr' => $product->cldr
+				'id' => $daoImage->image_id
 			) );
 		}
 		
@@ -169,11 +168,42 @@ class Mapper_Image extends Mapper
 {
 	public function find( Model_Image $image )
 	{
+		$this->_mapImage( $image, $this->_loadImage( $image ) );
+		return $image;
+	}
+	
+	/**
+	 * Map Image
+	 *
+	 * Moves data from the Image DAO into the Image DM
+	 *
+	 * @param Model_Image $image Domain Model
+	 * @param Dao_Image   $dao   Data Access Object
+	 */
+	protected function _mapImage( Model_Image $image, Dao_Image $dao )
+	{
 		$image->fromArray( array(
-			'id' => 1,
-			'cldr' => 'en_GB',
-			'src' => 'http://example.com/image.png'
+			'id' => $dao->id,
+			'src' => $dao->src
 		) );
 	}
+	
+	/**
+	 * Load Image
+	 *
+	 * Fetches the Image DAO from the database using details contained
+	 * within the domain model
+	 *
+	 * @param  Model_Image $image Domain Model
+	 * @return Dao_Image   $dao   Data Access Object
+	 */
+	protected function _loadImage( Model_Image $image )
+	{
+		if ( !$image->id )
+		{
+			throw new Exception( 'Need ID' );
+		}
+		
+		return Dao::gimmieImage( $image->id );
+	}
 }
-

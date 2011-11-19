@@ -1,7 +1,20 @@
 <?php
 
 /**
- * Dummy DAOs
+ * Dao.php
+ *
+ * This file contains all the dummy DAO classes. 
+ * These are ludicrously oversimplified and in reality 
+ * would interact with your database. 
+ *
+ * I recommend Doctrine ORM for this role.
+ * @see http://www.doctrine-project.org/
+ */
+
+/**
+ * Dummy DAO base class
+ * 
+ * Also statically acts as the data store.
  */
 class Dao
 {
@@ -12,6 +25,7 @@ class Dao
 			if ( $cldr == 'en_GB' )
 			{
 				return new Dao_ProductL10n( array(
+					'product_id' => 1,
 					'cldr' => 'en_GB',
 					'title' => 'My Product',
 					'summary' => "This product is so incredible, words just can't describe it!"
@@ -37,6 +51,34 @@ class Dao
 		throw new Exception( "nope" );
 	}
 	
+	public function gimmieImage( $id )
+	{
+		switch ( $id )
+		{
+			case 1:
+				return new Dao_Image( array(
+					'id' => 1,
+					'src' => 'http://imgs.xkcd.com/comics/wisdom_of_the_ancients.png'
+				) );
+				break;
+			
+			case 2:
+				return new Dao_Image( array(
+					'id' => 2,
+					'src' => 'http://imgs.xkcd.com/comics/the_general_problem.png'
+				) );
+				break;
+			
+			default:
+				throw new Exception( "nope" );
+		}
+	}
+	
+	/**
+	 * Construct
+	 * 
+	 * Populate the DAO object with data from the array
+	 */
 	public function __construct( array $array=array() )
 	{
 		foreach ( $array as $key => $value )
@@ -51,18 +93,32 @@ class Dao
 	}
 }
 
+/**
+ * Product DAO
+ */
 class Dao_Product extends Dao
 {
 	public $id = null;
 	public $sku = null;
-	
 	public $images = null;
 }
 
+/**
+ * Product Localisation DAO
+ */
 class Dao_ProductL10n extends Dao
 {
+	public $product_id = null;
 	public $cldr = null;
 	public $title = null;
 	public $summary = null;
 }
 
+/**
+ * Image DAO
+ */
+class Dao_Image extends Dao
+{
+	public $id = null;
+	public $src = null;
+}
