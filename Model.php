@@ -9,30 +9,30 @@ class Model
 	 * @access protected
 	 * @var Mapper If this model is to be lazy loaded, then this will be a reference to the Model's Mapper
 	 */
-	protected $__proxy = null;
+	protected $__mapper = null;
 	
 	/**
 	 * Proxy
 	 * 
 	 * @access protected
-	 * @param Mapper $proxy The mapper to be used if the model is to lazy-load (proxy)
+	 * @param Mapper $proxy The mapper to be used if the model is to lazy-load
 	 * @return null
 	 */
-	protected function __proxy( $proxy=null )
+	protected function __lazyLoad( $mapper=null )
 	{
-		if ( $proxy )
+		if ( $mapper )
 		{
-			$this->__proxy = $proxy;
+			$this->__mapper = $mapper;
 			return;
 		}
 		
-		if ( !$this->__proxy )
+		if ( !$this->__mapper )
 		{
 			return;
 		}
 		
-		$this->__proxy->find( $this );
-		$this->__proxy = null;
+		$this->__mapper->find( $this );
+		$this->__mapper = null;
 	}
 	
 	/**
@@ -64,7 +64,7 @@ class Model
 			throw new Exception( "Invalid property: {$property}\n" );
 		}
 		
-		$this->__proxy();
+		$this->__lazyLoad();
 		
 		return $this->$property;
 	}
@@ -86,7 +86,7 @@ class Model
 			throw new Exception( "Invalid property: {$property}\n" );
 		}
 		
-		$this->__proxy();
+		$this->__lazyLoad();
 		
 		$this->$property = $value;
 	}
@@ -102,7 +102,7 @@ class Model
 	 */
 	public function __call( $method, $params )
 	{
-		$this->__proxy();
+		$this->__lazyLoad();
 		
 		return call_user_func_array( array( $this, $method ), $params );
 	}

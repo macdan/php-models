@@ -152,7 +152,7 @@ class Mapper_Product extends Mapper
 		foreach ( $dao->images as $daoImage )
 		{
 			$images[] = new Model_Image( array(
-				'_proxy' => $this->getImageMapper(),
+				'_mapper' => $this->getImageMapper(),
 				'id' => $daoImage->image_id,
 				'cldr' => $product->cldr
 			) );
