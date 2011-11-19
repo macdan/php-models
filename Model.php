@@ -15,17 +15,10 @@ class Model
 	 * Proxy
 	 * 
 	 * @access protected
-	 * @param Mapper $proxy The mapper to be used if the model is to lazy-load
 	 * @return null
 	 */
 	protected function __lazyLoad( $mapper=null )
 	{
-		if ( $mapper )
-		{
-			$this->__mapper = $mapper;
-			return;
-		}
-		
 		if ( !$this->__mapper )
 		{
 			return;
