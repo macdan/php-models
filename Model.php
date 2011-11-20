@@ -131,7 +131,7 @@ class Model
 class Model_Product extends Model
 {
 	public $_id = null;
-	public $_sku = null;
+	public $_stock = null;
 	
 	public $_cldr = null;
 	public $_title = null;

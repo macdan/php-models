@@ -34,7 +34,7 @@ class Dao
 			
 			return new Dao_Product( array(
 				'id' => 1,
-				'sku' => "OMG-PROD",
+				'stock' => 50,
 				'images' => array(
 					(object) array(
 						'product_id' => 1,
@@ -99,7 +99,7 @@ class Dao
 class Dao_Product extends Dao
 {
 	public $id = null;
-	public $sku = null;
+	public $stock = null;
 	public $images = null;
 }
 

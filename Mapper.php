@@ -71,7 +71,7 @@ class Mapper_Product extends Mapper
 	{
 		$product->fromArray( array(
 			'id' => $dao->id,
-			'sku' => $dao->sku
+			'stock' => $dao->stock
 		) );
 	}
 	

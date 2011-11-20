@@ -36,7 +36,7 @@ assert( count( $product->images ) == 2 ); // ...so were the images!
 /**
  * And why not a bit of shell output?
  */
-echo '(', $product->sku, ') ', $product->title, "\r\n";
+echo $product->title, ' (', $product->stock, ')', "\r\n";
 
 foreach ( $product->images as $image )
 {
