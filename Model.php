@@ -131,6 +131,7 @@ class Model
 class Model_Product extends Model
 {
 	public $_id = null;
+	public $_barcode = null;
 	public $_stock = null;
 	
 	public $_cldr = null;
