@@ -3,8 +3,37 @@
 /**
  * Domain Model Base Class
  */
-class Model
+class Model implements Dk_Identity
 {
+/*	const STATE_NEW = 1;     // In memory only
+	const STATE_CLEAN = 2;   // Stored
+	const STATE_DIRTY = 3;   // Stored with changes in memory
+	const STATE_DELETED = 4; // Marked for deletion
+	
+	protected $_model_states = array(
+		self::STATE_NEW,
+		self::STATE_CLEAN,
+		self::STATE_DIRTY,
+		self::STATE_DELETED
+	);
+	protected $_model_state = self::STATE_NEW;
+	
+	public function modelState( $state = null )
+	{
+		if ( $state )
+		{
+			if ( !in_array( $state, $this->_model_states ) )
+			{
+				throw new Exception( "Invalid state: $state" );
+			}
+			
+			$this->_model_state = $state;
+			return $this->_model_state;
+		}
+		
+		return $this->_model_state;
+	}*/
+	
 	/**
 	 * @access protected
 	 * @var Mapper If this model is to be lazy loaded, then this will be a reference to the Model's Mapper
@@ -123,6 +152,13 @@ class Model
 			$this->$property = $value;
 		}
 	}
+	
+	// ------------------------------------------------------------------------
+	
+	public function identity()
+	{
+		return $this->_id;
+	}
 }
 
 /**
@@ -139,6 +175,11 @@ class Model_Product extends Model
 	public $_summary = null;
 	
 	public $_images = null;
+	
+	public function identity()
+	{
+		return 'urn:product:' . $this->_cldr . ':' . $this->_id;
+	}
 }
 
 /**

@@ -1,42 +1,68 @@
 <?php
 
 /**
- * Mapper Base Class
+ * Dk_Model_Mapper_Doctrine_Product
+ *
+ * The Product mapper, using Doctrine as the DAL.
  */
-class Mapper
+class Mapper_Doctrine_Product extends Dk_Model_Mapper_Doctrine
 {
 	/**
-	 * Magic Call
-	 *
-	 * Handles get*Mapper() calls
-	 *
-	 * @param  string $property The property to set
-	 * @param  array  $params The parameters the method was called with
-	 * @return mixed  The method return value
+	 * @var string The Domain Model class name
 	 */
-	public function __call( $method, $params )
+	protected $_domainModelClass = 'Model_Product';
+	
+	/**
+	 * Map
+	 *
+	 * The main Mapping function.
+	 *
+	 * @param Model_Dao_Product $source The Data Access Object (data source)
+	 * @param Model_Product $destination The Domain Model (data destination)
+	 * @returns Model_Product The same destination object, but with the data from $source mapped into it
+	 */
+	protected function _map( Model_Dao_Product $source, Model_Product $destination )
 	{
-		if ( preg_match( '/get(.+?)Mapper/', $method, $matches ) )
+		$images = array();
+		foreach ( $source->Image as $image )
 		{
-			$model = $matches[1];
-			
-			if ( !isset( $this->_mappers[ $model ] ) )
-			{
-				$class = "Mapper_{$model}";
-				$this->_mappers[ $model ] = new $class;
-			}
-			
-			return $this->_mappers[ $model ];
+			$images[] = new Model_Image( array(
+				'_mapper' => $this->getImageMapper(),
+				'id' => $image->id
+			) );
 		}
 		
-		throw new Exception( "Unknown method: {$method}" );
+		$destination->fromArray( array(
+			'id' => $source->id,
+			'barcode' => $source->barcode,
+			'stock' => $source->stock,
+			'cldr' => $source->ProductL10n[0]->cldr,
+			'title' => $source->ProductL10n[0]->title,
+			'summary' => $source->ProductL10n[0]->summary,
+			'images' => $images
+		) );
+		
+		return $destination;
+	}
+	
+	
+	public function _find( Model_Product $product )
+	{
+		$id = $product->id;
+		$cldr = $product->cldr;
+		
+		$results = $this->_query()
+			->where( 'p.id = ? AND l.cldr = ?', array( $id, $cldr ) )
+			->execute();
+		
+		return $this->_mapCollection( $results );
 	}
 }
 
 /**
  * Product Mapper
  */
-class Mapper_Product extends Mapper
+class Mapper_Product extends Dk_Model_Mapper
 {
 	/**
 	 * Find
@@ -49,7 +75,7 @@ class Mapper_Product extends Mapper
 	 *
 	 * @param Model_Product $product Domain Model
 	 */
-	public function find( Model_Product $product )
+	protected function _find( Model_Product $product )
 	{
 		$this->_mapProduct( $product, $this->_loadProduct( $product ) );
 		$this->_mapL10n( $product, $this->_loadL10n( $product ) );
@@ -165,9 +191,9 @@ class Mapper_Product extends Mapper
 /**
  * Image Mapper
  */
-class Mapper_Image extends Mapper
+class Mapper_Image extends Dk_Model_Mapper
 {
-	public function find( Model_Image $image )
+	protected function _find( Model_Image $image )
 	{
 		$this->_mapImage( $image, $this->_loadImage( $image ) );
 		return $image;
@@ -208,3 +234,4 @@ class Mapper_Image extends Mapper
 		return Dao::gimmieImage( $image->id );
 	}
 }
+
