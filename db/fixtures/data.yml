@@ -1,0 +1,23 @@
+Model_Dao_Product:
+  Model_Dao_Product_1:
+    id: 1
+    barcode: '123'
+    stock: '50'
+
+Model_Dao_ProductL10n:
+  Model_Dao_ProductL10n_1:
+    product_id: 1
+    cldr: en_GB
+    title: A pen
+  Model_Dao_ProductL10n_2:
+    product_id: 1
+    cldr: fr_FR
+    title: Un stylo
+
+Model_Dao_Image:
+  Model_Dao_Image_1:
+    product_id: 1
+    src: http://imgs.xkcd.com/comics/wisdom_of_the_ancients.png
+  Model_Dao_Image_2:
+    product_id: 1
+    src: http://imgs.xkcd.com/comics/the_general_problem.png

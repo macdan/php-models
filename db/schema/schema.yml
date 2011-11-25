@@ -1,0 +1,18 @@
+detect_relations: true
+
+Product:
+  columns:
+    barcode: string
+    stock: string
+
+ProductL10n:
+  columns:
+    product_id: integer
+    cldr: string
+    title: string
+    summary: string
+
+Image:
+  columns:
+    product_id: integer
+    src: string
